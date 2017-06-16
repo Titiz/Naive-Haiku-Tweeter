@@ -1,22 +1,18 @@
-from random import randint
+import random
 
-vowels = 'aeouiy'
+import twitter as tw
 
-f = open('words.txt')
-lines = f.readlines()
+VOWELS = 'aeouiy'
 
-def syllable(word):
+with open('words.txt') as fhandle:
+    lines = fhandle.readlines()
+
+
+def syllable(word: str) -> int:
     count = 0
-    i = 0
-    while True:
-        if word[i] not in vowels \
-                and i != len(word) - 1\
-                and (word[i-1] in vowels):
+    for ind, char in enumerate(word):
+        if char not in VOWELS and word[ind - 1] in VOWELS:
             count += 1
-        i += 1
-
-        if len(word) == i:
-            break
     return count
 
 
@@ -24,9 +20,9 @@ def write_line(syl):
     count = 0
     line = ''
     while count != syl:
-        word = lines[randint(0, len(lines)-1)]
+        word = random.choice(lines)
         if syllable(word) + count <= syl:
-            line += word[:-1] + ' '
+            line += word[:-1] + " "
             count += syllable(word)
     return line
 
@@ -34,14 +30,3 @@ def write_line(syl):
 haiku = write_line(5) + '\n' + write_line(7) + '\n' + write_line(5) + '\n'
 
 print(haiku)
-
-
-import twitter as tw
-
-
-
-
-
-
-
-
