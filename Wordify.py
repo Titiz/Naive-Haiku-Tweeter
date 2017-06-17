@@ -2,9 +2,10 @@ import requests
 from lxml import html
 import requests
 import json
-import logging  # TODO Start using logging
 
 from tqdm import tqdm
+
+import log
 
 
 def build_corpus() -> dict:
@@ -18,14 +19,16 @@ def build_corpus() -> dict:
 
     # TODO Figure out if there's a quicker way of handling the website
     # download, as currently, it's not cutting it
-    # TODO Handle exceptions
+
+    # TQDM provides a visual progress wrapper
     for word in tqdm(lines):
         try:
             page = requests.get(
                 'http://dictionary.reference.com/browse/' + word)
             tree = html.fromstring(page.content)
         except Exception as e:
-            print(e)
+            log.LOGGER.error(
+                "Retrieving '{}' failed".format(word), exc_info=True)
         # The element containing the language category of the given word
         # should always come first on the page, though this could change
         # if the website is reworked
@@ -33,7 +36,9 @@ def build_corpus() -> dict:
             lang_part = tree.xpath('//span[@class="dbox-pg"]')[0]
             word_type[word] = lang_part.text
         except IndexError as e:
-            pass
+            log.LOGGER.error(
+                "Language part of '{}' not found in page".format(word),
+                exc_info=True)
 
     # Taking the parts of speech and making them into dictionary keys
     headers = set(word_type.values())
@@ -49,12 +54,16 @@ def build_corpus() -> dict:
 
     # Saves the result as a JSON file for later usage (removes need for
     # individual text files)
+    log.LOGGER.info("Dumping corpus to .json file")
     json.dump(corpus, open("corpus.json", 'w+'), sort_keys=True, indent=4)
+    log.LOGGER.info("Corpus dumped")
 
     return corpus
 
 
 def load_corpus() -> dict:
     """Load corpus from JSON file."""
+    log.LOGGER.info("Grabbing corpus from .json file")
     corpus = json.load(open("corpus.json"))
+    log.LOGGER.info("Corpus obtained")
     return corpus
