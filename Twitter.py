@@ -6,16 +6,13 @@ from random import randint
 fhandle = open('words.txt')
 lines = fhandle.readlines()
 
-consumer_key = "ClKF74iUSAiOP47Jmo9QLlNe0"
-consumer_secret = "FTVQC2OgvvzaUfO8HPyCm05LT88wntdvUBRnnQ6kvFK4R6TqA9"
-access_token = "4611652875-kQLkQfUifVu28MceDs2YMJ5PmxLRGRChaJwDif6"
-access_token_secret = "4FZ6vgV9Tk3RwvxMduBQkUx41VsctleXFBXUnTfQyYubZ"
+
 tweet_length = 140  # characters
 vowels = 'aeouiy'
 sleep_time = 600  # seconds
 
-twitter = Twython(consumer_key, consumer_secret, access_token,
-                  access_token_secret)
+twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN,
+                  ACCESS_TOKEN_SECRET)
 
 
 def syllable(word):

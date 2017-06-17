@@ -1,6 +1,8 @@
 import random
 import re
 
+from wordify import load_corpus
+
 # Precompilation of the regex so that it would not have to be compiled
 # every iteration, saving time overall
 FORMAT_STR = re.compile("{(.*?)}")
@@ -14,21 +16,11 @@ SENTENCES = [
     "if {nouns1} {verbs1} then how {nouns2} {verbs2}"
 ]
 
-corpus = {'articles': ['a', 'the', ''],
-          'junctions': ['and', 'or', ', but', ', yet', 'then']
-          }
-
-# Removing objects from the global namespace once the module is imported
-_files = ['verbs.txt', 'nouns.txt', 'adverbs.txt',
-          'adjectives.txt', 'prepositions.txt']
-
-for file in _files:
-    with open(file) as fhandle:
-        corpus[file.split(".")[0]] = [line.strip()
-                                      for line in fhandle.readlines()]
+corpus = load_corpus()
 
 
 def non_numeric_string(string: str) -> str:
+    """Return a string without embedded numeric characters."""
     return "".join(char for char in string if not char.isdigit())
 
 
