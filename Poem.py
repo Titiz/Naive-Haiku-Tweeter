@@ -2,6 +2,7 @@ import random
 import re
 
 from wordify import load_corpus
+from constants import SENTENCES
 
 # Precompilation of the regex so that it would not have to be compiled
 # every iteration, saving time overall
@@ -10,11 +11,6 @@ FORMAT_STR = re.compile("{(.*?)}")
 # Possible sentence constructions. As we go along, can add many more
 # and then divide them into beginning, body and end constructions,
 # allowing for a wider variety of sentences.
-SENTENCES = [
-    "{nouns1} {verbs} {prepositions} {articles} {nouns2}",
-    "{adjectives} like the {nouns}",
-    "if {nouns1} {verbs1} then how {nouns2} {verbs2}"
-]
 
 corpus = load_corpus()
 

@@ -5,7 +5,7 @@ import twitter as tw
 VOWELS = 'aeouiy'
 
 with open('words.txt') as fhandle:
-    lines = fhandle.readlines()
+    lines = [word.strip() for word in fhandle.readlines()]
 
 
 def syllable(word: str) -> int:
@@ -17,16 +17,19 @@ def syllable(word: str) -> int:
 
 
 def write_line(syl):
-    count = 0
     line = ''
-    while count != syl:
+    while syllable(line) < syl:
         word = random.choice(lines)
-        if syllable(word) + count <= syl:
-            line += word[:-1] + " "
-            count += syllable(word)
-    return line
+        if syllable(word) + syllable(line) <= syl:
+            line += word + " "
+    return line.strip()
 
 
-haiku = write_line(5) + '\n' + write_line(7) + '\n' + write_line(5) + '\n'
+def write_haiku():
+    haiku = "{}\n{}\n{}.".format(write_line(5),
+                                 write_line(7),
+                                 write_line(5))
+    return haiku.strip().capitalize()
 
-print(haiku)
+if __name__ == '__main__':
+    print(write_haiku())
